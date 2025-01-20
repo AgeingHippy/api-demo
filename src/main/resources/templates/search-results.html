@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New York Times API Demo</title>
+    <div th:replace="~{fragments :: header}"/>
+</head>
+<body>
+<div th:replace="~{fragments :: navigation}"/>
+<div class="container">
+    <div class="bg-light p-4 rounded m-2">
+        <h1 class="display-4">New York Times Search</h1>
+        <th:block>
+            <div class="row justify-content-center">
+                <form action="#" th:action="@{'/search'}" method="get">
+                    <!--                      th:object="${car}" method="post">-->
+                    <label for="searchText">Enter Search Text</label>
+                    <input type="text" id="searchText" name="searchText" th:value="${searchText}"/>
+                    <input type="submit" value="Search">
+                </form>
+            </div>
+        </th:block>
+        <th:block>
+            <div class="row justify-content-center">
+                <div th:if="${docList.isEmpty()}">
+                    <div th:if="${searchText != null}">
+                        <p>No results found</p>
+                    </div>
+                </div>
+                <div th:unless="${docList.isEmpty()}">
+                    <div class="col-auto" th:each="doc: ${docList}">
+                        <div class="card flex-row" style="height: 16rem;">
+                            <div class="embed-responsive embed-responsive-16by9">
+                                <img th:unless="${doc.imageUrl == null}" th:src="${doc.imageUrl}"
+                                     class="card-img-left embed-responsive-item">
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${doc.headline.main}">title</h5>
+                                <p class="card-text" th:text="${doc.leadParagraph}">summary</p>
+                                <footer class="blockquote-footer">
+                                    <p th:text="|${doc.publishDate} - ${doc.newsDesk}">Published</p>
+                                    <p>
+                                        <a th:href="${doc.webUrl}">Read More..</a>
+                                    </p>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+</div>
+<div th:replace="~{fragments :: footer}"/>
+</body>
+</html>
